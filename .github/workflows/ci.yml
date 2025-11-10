@@ -1,0 +1,35 @@
+name: CI msvc-gateway
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant execute permission for Gradle Wrapper
+        run: chmod +x gradlew
+
+      - name: Build without tests
+        run: ./gradlew clean build -x test
+
+      - name: Upload Artifact (JAR File)
+        uses: actions/upload-artifact@v4
+        with:
+          name: msvc-gateway-jar
+          path: build/libs/*.jar
+          retention-days: 1

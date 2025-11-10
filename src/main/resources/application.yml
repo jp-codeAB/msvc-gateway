@@ -1,0 +1,72 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: msvc-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            # AUTH
+            - id: msvc-auth
+              uri: lb://msvc-auth
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                #- StripPrefix=1
+            # INVENTORY
+            - id: msvc-inventory
+              uri: lb://msvc-inventory
+              predicates:
+                - Path=/api/products/**
+              filters:
+                - StripPrefix=1
+            # CATEGORIES
+            - id: msvc-inventory-categories
+              uri: lb://msvc-inventory
+              predicates:
+                - Path=/api/categories/**
+              filters:
+                - StripPrefix=1
+            # ORDERS
+            - id: msvc-orders
+              uri: lb://msvc-orders
+              predicates:
+                - Path=/api/orders/**
+              filters:
+                - StripPrefix=1
+            # CARS
+            - id: msvc-carts
+              uri: lb://msvc-carts
+              predicates:
+                - Path=/api/carts/**
+              filters:
+                - StripPrefix=1
+            # PAYMENTS
+            - id: msvc-payments
+              uri: lb://msvc-payments
+              predicates:
+                - Path=/api/payments/**
+              filters:
+                - StripPrefix=1
+            # NOTIFICATION
+            - id: msvc-notification
+              uri: lb://msvc-notification
+              predicates:
+                - Path=/api/notifications/**
+              filters:
+                - StripPrefix=1
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+
+jwt:
+  secret: VvQ4uF5t+HhX0fG6oA9/eJ7hR5t7yL1D3kG9QxT4zC2o=
