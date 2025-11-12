@@ -1,4 +1,4 @@
-name: CI msvc-gateway
+name: CI-msvc-gateway
 
 on:
   push:
